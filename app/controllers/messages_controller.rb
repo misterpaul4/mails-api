@@ -9,7 +9,7 @@ class MessagesController < ApplicationController
 
    # POST /messages
    def create
-    @message = Message.new(message_params)
+    @message = Message.new(creator_id: message_params[:creator_id], subject: message_params[:subject], read: false, content: message_params[:content])
 
     if @message.save
       render json: @message, status: :created, location: @message
@@ -17,7 +17,6 @@ class MessagesController < ApplicationController
       render json: @message.errors, status: :unprocessable_entity
     end
   end
-
 
   # PATCH/PUT /messages/1
   def update
@@ -41,6 +40,6 @@ class MessagesController < ApplicationController
   
     # Only allow a list of trusted parameters through.
     def message_params
-      params.permit(:subject, :content, :flag)
+      params.permit(:subject, :content, :read, :creator_id)
     end
 end

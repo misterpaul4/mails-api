@@ -3,8 +3,8 @@ class CreateMessages < ActiveRecord::Migration[6.1]
     create_table :messages do |t|
       t.string :subject
       t.text :content
-      t.boolean :flag
-      t.references :creator
+      t.boolean :read
+      t.integer :creator_id
 
       t.timestamps
     end

@@ -1,8 +1,8 @@
 class CreateReceivers < ActiveRecord::Migration[6.1]
   def change
     create_table :receivers do |t|
-      t.references :received_message
-      t.references :receiver
+      t.integer :received_message_id
+      t.integer :receiver_id
 
       t.timestamps
     end

@@ -15,11 +15,10 @@ ActiveRecord::Schema.define(version: 2022_01_24_203151) do
   create_table "messages", force: :cascade do |t|
     t.string "subject"
     t.text "content"
-    t.boolean "flag"
+    t.boolean "read"
     t.integer "creator_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["creator_id"], name: "index_messages_on_creator_id"
   end
 
   create_table "receivers", force: :cascade do |t|
@@ -27,8 +26,6 @@ ActiveRecord::Schema.define(version: 2022_01_24_203151) do
     t.integer "receiver_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["received_message_id"], name: "index_receivers_on_received_message_id"
-    t.index ["receiver_id"], name: "index_receivers_on_receiver_id"
   end
 
   create_table "users", force: :cascade do |t|
