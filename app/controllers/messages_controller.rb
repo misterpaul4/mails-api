@@ -1,6 +1,12 @@
 class MessagesController < ApplicationController
   before_action :set_message, only: %i[show update destroy]
 
+  def index
+    @messages = Message.all
+
+    render json: @messages
+  end
+
    # POST /messages
    def create
     @message = Message.new(message_params)
