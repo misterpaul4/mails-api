@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: %i[show update destroy]
+  before_action :set_user, only: %i[show update destroy messages received_messages]
 
   def index
     @users = User.all
@@ -16,6 +16,18 @@ class UsersController < ApplicationController
     else
       render json: @user.errors, status: :unprocessable_entity
     end
+  end
+
+  def messages
+    @messages = @user.messages
+
+    render json: @messages
+  end
+
+  def received_messages
+    @messages = @user.received_message
+
+    render json: @messages
   end
 
   # PATCH/PUT /users/username

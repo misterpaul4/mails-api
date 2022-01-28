@@ -1,5 +1,6 @@
 class MessagesController < ApplicationController
   before_action :set_message, only: %i[show update destroy]
+  before_action :find_receiver, only: %i[create]
 
   def index
     @messages = Message.all
@@ -10,8 +11,9 @@ class MessagesController < ApplicationController
    # POST /messages
    def create
     @message = Message.new(creator_id: message_params[:creator_id], subject: message_params[:subject], read: false, content: message_params[:content])
-
+    
     if @message.save
+      Receiver.create(received_message_id: @message.id, receiver_id: @receiver.id)
       render json: @message, status: :created, location: @message
     else
       render json: @message.errors, status: :unprocessable_entity
@@ -37,9 +39,15 @@ class MessagesController < ApplicationController
     def set_message
       @message = Message.find(params[:id])
     end
+
+    def find_receiver
+      @receiver = User.find_by_username!(params[:recipient]);
+      rescue ActiveRecord::RecordNotFound
+        render json: { errors: 'Receiver(recipient) not found' }, status: :not_found
+    end
   
     # Only allow a list of trusted parameters through.
     def message_params
-      params.permit(:subject, :content, :read, :creator_id)
+      params.permit(:subject, :content, :read, :creator_id, :recipient)
     end
 end
