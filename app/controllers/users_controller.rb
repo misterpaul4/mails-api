@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: %i[show update destroy messages received_messages]
+  before_action :set_user, only: %i[show update destroy messages received_messages unread_messages]
 
   def index
     @users = User.all
@@ -30,6 +30,12 @@ class UsersController < ApplicationController
 
   def received_messages
     @messages = @user.received_message
+
+    render json: @messages
+  end
+
+  def unread_messages
+    @messages = @user.unread_messages.count
 
     render json: @messages
   end

@@ -10,6 +10,10 @@ class User < ApplicationRecord
     self.username.downcase!
   end
 
+  def unread_messages
+    received_message.where(read: false)
+  end
+
   # validation
   validates :username, presence: true, uniqueness: true
 end
