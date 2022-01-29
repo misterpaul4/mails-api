@@ -18,6 +18,10 @@ class UsersController < ApplicationController
     end
   end
 
+  def show
+    render json: @user
+  end
+
   def messages
     @messages = @user.messages
 
