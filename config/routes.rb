@@ -7,4 +7,5 @@ Rails.application.routes.draw do
   get 'users/(:_username)/messages', to: 'users#messages'
   get 'users/(:_username)/received_messages', to: 'users#received_messages'
   get 'users/(:_username)/unread_messages', to: 'users#unread_messages'
+  get 'users/(:_username)/inbox', to: 'users#inbox'
 end

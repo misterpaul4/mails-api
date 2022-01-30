@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: %i[show update destroy messages received_messages unread_messages]
+  before_action :set_user, only: %i[show update destroy messages received_messages unread_messages inbox]
 
   def index
     @users = User.all
@@ -22,18 +22,30 @@ class UsersController < ApplicationController
     render json: @user
   end
 
+  # most recent messages (sent or received)
+  def inbox
+    allMessages = @user.messages + @user.received_message
+    sortedMessages = allMessages.sort_by {|msg| msg[:updated_at]}.reverse
+    messages = sortedMessages.uniq {|msg| msg[:creator_id]}
+
+    render json: messages
+  end
+
+  # sent messages  
   def messages
     @messages = @user.messages
 
     render json: @messages
   end
 
+  # received messages
   def received_messages
     @messages = @user.received_message
 
     render json: @messages
   end
 
+  # unread messages count
   def unread_messages
     @messages = @user.unread_messages.count
 
