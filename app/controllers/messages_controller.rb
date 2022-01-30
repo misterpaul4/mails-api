@@ -1,6 +1,8 @@
 class MessagesController < ApplicationController
   before_action :set_message, only: %i[show update destroy]
   before_action :find_receiver, only: %i[create]
+  before_action :find_creator, only: %i[create]
+  before_action :disallowSelfMessage, only: %i[create]
 
   def index
     @messages = Message.all
@@ -10,8 +12,8 @@ class MessagesController < ApplicationController
 
    # POST /messages
    def create
-    @message = Message.new(creator_id: message_params[:creator_id], subject: message_params[:subject], read: false, content: message_params[:content])
-    
+    @message = Message.new(creator_id: @creator.id, subject: message_params[:subject], read: false, content: message_params[:content])
+
     if @message.save
       Receiver.create(received_message_id: @message.id, receiver_id: @receiver.id)
       render json: @message, status: :created, location: @message
@@ -40,14 +42,26 @@ class MessagesController < ApplicationController
       @message = Message.find(params[:id])
     end
 
+    def disallowSelfMessage
+      if @creator == @receiver
+        render json: { errors: 'cannot send message to yourself' }, status: :unprocessable_entity
+      end
+    end
+
     def find_receiver
       @receiver = User.find_by_username!(params[:recipient]);
       rescue ActiveRecord::RecordNotFound
-        render json: { errors: 'Receiver(recipient) not found' }, status: :not_found
+        render json: { errors: 'recipient not found' }, status: :not_found
+    end
+
+    def find_creator
+      @creator = User.find_by_username!(params[:sender]);
+      rescue ActiveRecord::RecordNotFound
+        render json: { errors: 'sender not found' }, status: :not_found
     end
   
     # Only allow a list of trusted parameters through.
     def message_params
-      params.permit(:subject, :content, :read, :creator_id, :recipient)
+      params.permit(:subject, :content, :read, :sender, :recipient)
     end
 end
