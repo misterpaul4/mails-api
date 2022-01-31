@@ -13,3 +13,6 @@ querry parameters: username
 
 * How to create new messages
 POST  https://calm-beach-19704.herokuapp.com/messages
+
+querry parameters: sender, recipient, subject, creator
+
