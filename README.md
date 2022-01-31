@@ -3,6 +3,8 @@
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
+* Predefined User: paul
+
 * Host
   https://calm-beach-19704.herokuapp.com/
 
@@ -15,4 +17,8 @@ querry parameters: username
 POST  https://calm-beach-19704.herokuapp.com/messages
 
 querry parameters: sender, recipient, subject, creator
+
+
+* How to get inbox(received messages)
+GET https://calm-beach-19704.herokuapp.com/paul/inbox
 
