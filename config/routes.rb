@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   resources :users, param: :_username
-  resources :messages, only: %i[new create destroy index]
+  resources :messages, only: %i[new create destroy index show]
   resources :receivers, only: %i[new create index]
 
   get 'users/(:_username)/messages', to: 'users#messages'

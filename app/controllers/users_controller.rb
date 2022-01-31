@@ -24,14 +24,12 @@ class UsersController < ApplicationController
 
   # most recent messages (sent or received)
   def inbox
-    allMessages = @user.messages + @user.received_message
-    sortedMessages = allMessages.sort_by {|msg| msg[:updated_at]}.reverse
-    messages = sortedMessages.uniq {|msg| msg[:creator_id]}
+    sortedMessages = @user.received_message.sort_by {|msg| msg[:updated_at]}.reverse
 
-    render json: messages
+    render json: sortedMessages
   end
 
-  # sent messages  
+  # sent messages
   def messages
     @messages = @user.messages
 

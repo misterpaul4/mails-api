@@ -1,8 +1,7 @@
 class MessagesController < ApplicationController
   before_action :set_message, only: %i[show update destroy]
-  before_action :find_receiver, only: %i[create]
   before_action :find_creator, only: %i[create]
-  before_action :disallowSelfMessage, only: %i[create]
+  before_action :find_receiver, only: %i[create]
 
   def index
     @messages = Message.all
@@ -20,6 +19,13 @@ class MessagesController < ApplicationController
     else
       render json: @message.errors, status: :unprocessable_entity
     end
+  end
+
+  # GET /messages/1
+  def show
+    @message.read = true
+    @message.save
+    render json: @message
   end
 
   # PATCH/PUT /messages/1
@@ -40,12 +46,6 @@ class MessagesController < ApplicationController
 
     def set_message
       @message = Message.find(params[:id])
-    end
-
-    def disallowSelfMessage
-      if @creator == @receiver
-        render json: { errors: 'cannot send message to yourself' }, status: :unprocessable_entity
-      end
     end
 
     def find_receiver
